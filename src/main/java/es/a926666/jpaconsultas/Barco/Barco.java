@@ -32,11 +32,11 @@ public class Barco {
     private String nombre;
 
     @OneToOne(mappedBy = "barco",cascade = CascadeType.ALL)
-    @JsonBackReference
+    @JsonManagedReference
     private Amarre amarre;
 
     @OneToMany(mappedBy = "barco",cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonBackReference
     private List<Salida> salidas;
 
     @ManyToOne

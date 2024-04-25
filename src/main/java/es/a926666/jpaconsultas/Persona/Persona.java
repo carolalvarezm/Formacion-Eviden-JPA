@@ -3,6 +3,8 @@ package es.a926666.jpaconsultas.Persona;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import es.a926666.jpaconsultas.Salida.Salida;
 import es.a926666.jpaconsultas.Socio.Socio;
 import jakarta.persistence.Basic;
@@ -25,9 +27,11 @@ public class Persona {
     private String lastname;
 
     @OneToOne(mappedBy = "persona",cascade = CascadeType.ALL)
+    @JsonBackReference
     private Socio socio;
 
     @OneToMany(mappedBy = "patron",cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Salida> salidas;
 
     public Socio getSocio() {

@@ -13,6 +13,9 @@ import es.a926666.jpaconsultas.Socio.Socio;
 import es.a926666.jpaconsultas.Amarre.AmarreRepository;
 import es.a926666.jpaconsultas.Salida.Salida;
 import es.a926666.jpaconsultas.Socio.SocioRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
 
 @Service
 public class BarcoService {
@@ -122,4 +125,5 @@ public class BarcoService {
             return ResponseEntity.ok(salidas);
         }
     }
+
 }

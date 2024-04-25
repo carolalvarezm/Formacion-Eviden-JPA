@@ -2,7 +2,7 @@ package es.a926666.jpaconsultas.Salida;
 
 
 import java.util.Optional;
-
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +10,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.jpa.JPQLTemplates;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import es.a926666.jpaconsultas.Barco.Barco;
 import es.a926666.jpaconsultas.Barco.BarcoRepository;
+import es.a926666.jpaconsultas.Barco.QBarco;
 import es.a926666.jpaconsultas.Persona.Persona;
 import es.a926666.jpaconsultas.Persona.PersonaRepository;
+import jakarta.persistence.EntityManager;
+
 
 @Service
 public class SalidaService {
+    @Autowired
+    private EntityManager em;
     @Autowired
     private SalidaRepository salidaRepository;
     @Autowired
@@ -108,4 +118,52 @@ public class SalidaService {
             return ResponseEntity.ok(salidas);
         }
     }
+
+    public ResponseEntity<?> getAllSalidasSocioById(Integer id) {
+        List<Salida> salidas= salidaRepository.findAllSalidasSociosById(id);
+    
+        if(salidas.size()<=0){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se ha encontrado el recurso");
+        }
+        else{
+            return ResponseEntity.ok(salidas);
+        }
+    }
+
+    public ResponseEntity<?> getSalidasByFecha(Date fecha) {
+        List<Salida> salidas= salidaRepository.findByFecha(fecha);
+    
+        if(salidas.size()<=0){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se ha encontrado el recurso");
+        }
+        else{
+            return ResponseEntity.ok(salidas);
+        }
+    }
+
+    public List<Barco> findAllBarcosWithMoreThan2Patrones(){
+        JPAQueryFactory queryFactory = new JPAQueryFactory(JPQLTemplates.DEFAULT, em);
+        QBarco barco= QBarco.barco;
+        QSalida salida=QSalida.salida;
+        List<Barco> barcos = queryFactory.select(barco)
+        .from(salida)
+        .innerJoin(salida.barco,barco)
+        .groupBy(barco.id)
+        .having(salida.patron.countDistinct().gt(1))
+        .fetch(); 
+        return barcos;
+    }
+
+    public ResponseEntity<?> getBarcosWithMoreThan2Patrones() {
+        //List<Barco> barcos= salidaRepository.findAllBarcosWithMoreThan2Patrones();
+        List<Barco> barcos= this.findAllBarcosWithMoreThan2Patrones();
+        if(barcos.size()<=0){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se ha encontrado el recurso");
+        }
+        else{
+            return ResponseEntity.ok(barcos);
+        }
+    }
+
+    
 }

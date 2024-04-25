@@ -23,6 +23,10 @@ public class AmarreController {
     public ResponseEntity<?> getAllAmarres() {
         return amarreService.getAllAmarres();
     }
+    @GetMapping("/null")
+    public ResponseEntity<?> getAllNullAmarres() {
+        return amarreService.getAllNullAmarres();
+    }
     @PostMapping
     public ResponseEntity<?> createdAmarre(@RequestBody Amarre amarre) {
         return amarreService.createAmarre(amarre);

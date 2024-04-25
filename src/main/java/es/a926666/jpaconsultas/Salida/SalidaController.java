@@ -1,5 +1,7 @@
 package es.a926666.jpaconsultas.Salida;
 
+import java.sql.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,7 +34,18 @@ public class SalidaController {
         public ResponseEntity<?> getAllSalidasSocio() {
             return salidaService.getAllSalidasSocio();
         }
-        
+        @GetMapping("/socios/{id}")
+        public ResponseEntity<?> getAllSalidasSocioById(@PathVariable Integer id) {
+            return salidaService.getAllSalidasSocioById(id);
+        }
+        @GetMapping("/{fecha}")
+        public ResponseEntity<?> getSalidasByFecha(@PathVariable Date fecha) {
+            return salidaService.getSalidasByFecha(fecha);
+        }
+        @GetMapping("/barcosmorethan2patrones")
+        public ResponseEntity<?> getBarcosWithMoreThan2Patrones() {
+            return salidaService.getBarcosWithMoreThan2Patrones();
+        }
         @PutMapping("/{id}")
         public ResponseEntity<?> updateSalidaById(@PathVariable Integer id,@RequestBody SalidaRequest salidaRequest) {
             return salidaService.UpdateSalidaById(id,salidaRequest);

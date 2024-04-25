@@ -10,10 +10,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+
 @Service
 public class AmarreService {
     @Autowired
     public AmarreRepository amarreRepository;
+    @Autowired
+    EntityManager em;
 
     public AmarreService(AmarreRepository amarreRepository) {
         this.amarreRepository = amarreRepository;
@@ -64,6 +73,26 @@ public class AmarreService {
         }
         catch(Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+        }
+    }
+    public List<Amarre> findAllNullAmarres(){
+        CriteriaBuilder cb= em.getCriteriaBuilder();
+        CriteriaQuery<Amarre> cq= cb.createQuery(Amarre.class);
+        Root<Amarre> amarre= cq.from(Amarre.class);
+        Predicate nullbarco = cb.isNull(amarre.get("barco"));
+        cq.where(nullbarco);
+        TypedQuery<Amarre> query = em.createQuery(cq);
+        return query.getResultList();
+        
+    }
+    public ResponseEntity<?> getAllNullAmarres() {
+        List<Amarre> amarres= this.findAllNullAmarres();
+        
+        if(amarres.size()<=0){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se ha encontrado el recurso");
+        }
+        else{
+            return ResponseEntity.ok(amarres);
         }
     }
 }
