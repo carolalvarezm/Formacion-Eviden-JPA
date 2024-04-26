@@ -3,7 +3,7 @@ package es.a926666.jpaconsultas.Salida;
 import java.sql.Date;
 import java.sql.Time;
 
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import es.a926666.jpaconsultas.Barco.Barco;
@@ -34,12 +34,12 @@ public class Salida {
 
     @ManyToOne
     @JoinColumn(name="barco_id")
-    @JsonManagedReference
+    @JsonBackReference(value="Salidas-Barco")
     private Barco barco; 
 
     @ManyToOne
     @JoinColumn(name="patron_id")
-    @JsonManagedReference
+    @JsonBackReference(value="Patron-Salida")
     private Persona patron;
 
     public Salida() {

@@ -3,7 +3,7 @@ package es.a926666.jpaconsultas.Amarre;
 import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 import es.a926666.jpaconsultas.Barco.Barco;
 import jakarta.persistence.Column;
@@ -26,9 +26,10 @@ public class Amarre
     @Column(precision=10, scale=2)
     private BigDecimal cuota;
 
+    
     @OneToOne
     @JoinColumn(name="barco_id")
-    @JsonManagedReference
+    @JsonBackReference(value="Amarre-barco")
     private Barco barco;
 
     public Amarre() {

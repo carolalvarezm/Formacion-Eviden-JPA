@@ -62,7 +62,7 @@ public class AmarreService {
     public ResponseEntity<?>  updateAmarreById(Integer id,Amarre amarreNew) {
         try{
             Optional<Amarre> amarre= amarreRepository.findById(id);
-            if(amarre!=null){
+            if(amarre.isPresent()){
                 amarreNew.setId(id);
                 amarreRepository.save(amarreNew);
                 return ResponseEntity.ok(amarreNew);

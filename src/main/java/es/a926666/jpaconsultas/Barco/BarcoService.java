@@ -13,9 +13,7 @@ import es.a926666.jpaconsultas.Socio.Socio;
 import es.a926666.jpaconsultas.Amarre.AmarreRepository;
 import es.a926666.jpaconsultas.Salida.Salida;
 import es.a926666.jpaconsultas.Socio.SocioRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
+
 
 @Service
 public class BarcoService {
@@ -36,12 +34,23 @@ public class BarcoService {
             Barco barco= new Barco();
             Optional<Amarre> amarre = amarreRepository.findById(barcoRequest.getIdAmarre());
             Optional<Socio> propietario =socioRepository.findById(barcoRequest.getIdPropietario());
+
             if(amarre.isPresent() && propietario.isPresent()){
                 barco.setMatricula(barcoRequest.getMatricula());
                 barco.setNombre(barcoRequest.getNombre());
                 barco.setAmarre(amarre.get());
                 barco.setPropietario(propietario.get());
                 barcoRepository.save(barco);
+                
+                
+                if(amarre.get().getBarco()==null){
+                    amarre.get().setBarco(barco);
+                    amarreRepository.save(amarre.get());
+                }
+                else{
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El amarre no está disponible");
+                }
+
 
                 return ResponseEntity.status(HttpStatus.CREATED).body("Se ha creado correctamente");
             }
@@ -92,6 +101,13 @@ public class BarcoService {
                 barco.setPropietario(propietario.get());
                 barcoRepository.save(barco);
 
+                if(amarre.get().getBarco()==null){
+                    amarre.get().setBarco(barco);
+                    amarreRepository.save(amarre.get());
+                }
+                else{
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El amarre no está disponible");
+                }
                 return ResponseEntity.status(HttpStatus.OK).body("Se ha actualizado correctamente");
             }
             else{
@@ -107,7 +123,7 @@ public class BarcoService {
 
     public ResponseEntity<?> getBarcoById(Integer id) {
         Optional<Barco> barco= barcoRepository.findById(id);
-        if(barco!=null){
+        if(barco.isPresent()){
             return ResponseEntity.ok(barco.get());
         }
         else{

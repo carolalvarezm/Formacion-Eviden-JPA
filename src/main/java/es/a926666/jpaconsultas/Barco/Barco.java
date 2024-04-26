@@ -31,17 +31,18 @@ public class Barco {
     @Basic
     private String nombre;
 
-    @OneToOne(mappedBy = "barco",cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @OneToOne(mappedBy = "barco", cascade =CascadeType.ALL)
+    
+    @JsonManagedReference(value="Amarre-barco")
     private Amarre amarre;
 
     @OneToMany(mappedBy = "barco",cascade = CascadeType.ALL)
-    @JsonBackReference
+    @JsonManagedReference(value="Salidas-Barco")
     private List<Salida> salidas;
 
     @ManyToOne
     @JoinColumn(name="propietario_id")
-    @JsonBackReference
+    @JsonBackReference(value = "Propietario-Barco")
     private Socio propietario;
 
     public Barco() {

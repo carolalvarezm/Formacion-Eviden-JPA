@@ -27,11 +27,11 @@ public class Persona {
     private String lastname;
 
     @OneToOne(mappedBy = "persona",cascade = CascadeType.ALL)
-    @JsonBackReference
+    @JsonBackReference(value="Socio-Persona")
     private Socio socio;
 
     @OneToMany(mappedBy = "patron",cascade = CascadeType.ALL)
-    @JsonBackReference
+    @JsonBackReference(value="Patron-Salida")
     private List<Salida> salidas;
 
     public Socio getSocio() {

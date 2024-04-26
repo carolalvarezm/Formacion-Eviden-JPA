@@ -23,11 +23,11 @@ public class Socio {
     
     @OneToOne
     @JoinColumn(name="persona_id")
-    @JsonBackReference
+    @JsonBackReference(value="Socio-Persona")
     private Persona persona;
 
     @OneToMany(mappedBy="propietario",cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference(value = "Propietario-Barco")
     private List<Barco> barcos;
 
     public Socio() {

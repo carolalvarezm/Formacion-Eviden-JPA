@@ -25,6 +25,6 @@ public interface SalidaRepository extends JpaRepository<Salida,Integer>{
     //Salidas de una fecha específica
     List<Salida> findByFecha(Date fecha);
 
-    @Query("SELECT b From Salida s Join Barco b on s.barco.id =b.id GROUP BY s.barco.id,b.id Having Count(Distinct s.patron.id)>1")
-    List<Barco> findAllBarcosWithMoreThan2Patrones();
+    // @Query("SELECT b From Salida s Join Barco b on s.barco.id =b.id GROUP BY s.barco.id,b.id Having Count(Distinct s.patron.id)>1")
+    // List<Barco> findAllBarcosWithMoreThan2Patrones();
 }
